@@ -1,0 +1,31 @@
+{
+  "c31c626f-491a-4bf0-8b7b-cb4732909a2d": {
+    "llm-1": {
+      "main": true,
+      "_comment": "TODO: When generation the config, we need to add the connected nodes to the prompt and explain what to do and when to use them.",
+      "prompt": "You are an expert assistant. Provide detailed and accurate responses to user queries.",
+      "model": "gemini-3"
+    },
+    "llm-2": {
+      "main": false,
+      "prompt": "You are a helpful assistant. Keep your answers concise and to the point.",
+      "model": "gpt-4-turbo"
+    },
+    "api-1": {
+      "endpoint": "https://api.example.com",
+      "endpoints": {
+        "getData": {
+          "method": "GET",
+          "path": "/data"
+        },
+        "postData": {
+          "method": "POST",
+          "path": "/data",
+          "body": {
+            "key": "value"
+          }
+        }
+      }
+    }
+  }
+}

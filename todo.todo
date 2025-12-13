@@ -1,6 +1,10 @@
 todos:
   ✔ Basic express app @done(25-12-08 15:49)
-  ☐ Get models
-  ☐ Ask agents function (POST)
+  ✔ Design the agent settings (how and where are we gonna store the settings) @done(25-12-13 14:41)
+    ✔ in a json @done(25-12-13 14:41)
+      ✔ Have a json with all the agents(with the prompt and the model) and tools with its own settings @done(25-12-13 14:41)
   ☐ Open router models
+  ☐ Ask agents endpoint (POST)
+   ☐ Get project settings
+   ☐ Speak with the agent provider
   ☐ Basic api tool

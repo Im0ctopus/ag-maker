@@ -1,6 +1,7 @@
 import express from 'express'
-import { ask } from '../controllers/agentController'
+import { getModels, ask } from '../controllers/agentController'
 
 export const agentRouter = express.Router()
 
-agentRouter.get('/', ask)
+agentRouter.get('/', getModels)
+agentRouter.post('/ask', ask)
