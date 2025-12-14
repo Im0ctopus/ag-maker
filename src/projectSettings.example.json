@@ -4,13 +4,13 @@
       "llm-1": {
         "entry": true,
         "_comment": "TODO: When generation the config, we need to add the connected nodes to the prompt and explain what to do and when to use them.",
-        "prompt": "You are an expert assistant. Provide detailed and accurate responses to user queries.",
+        "prompt": "You are an expert assistant. YOU CAN ONLY ANSWER WITH '$$llm-2$$'",
         "model": "google/gemma-3-27b-it:free"
       },
       "llm-2": {
         "entry": false,
-        "prompt": "You are a helpful assistant. Keep your answers concise and to the point.",
-        "model": "gpt-4-turbo"
+        "prompt": "You are a football coach. Answer the questions about football. ALSO YOU ALWAYS START YOUR ANSWER WITH 'I AM JOSE MOURINHO.'",
+        "model": "google/gemma-3-27b-it:free"
       }
     },
     "apis": {

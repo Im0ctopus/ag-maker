@@ -19,14 +19,10 @@ export const processAgentRequest = async (
       (key) => projectSettings.llms[key]?.entry
     )
     const entryLlm = projectSettings.llms[entryLlmKey || '']
-
     if (!entryLlm) throw new Error('No entry LLM configured for this project')
 
     const entryRes = await callLlm(entryLlm, messages)
-
-    // TODO: Process the response from the LLM and take actions accordingly
-
-    res.message = entryRes
+    res.message = await processLlmResponse(entryRes, projectSettings, messages)
   } catch (e) {
     res.success = false
     res.message = `${e}`
@@ -35,4 +31,27 @@ export const processAgentRequest = async (
   res.duration = `${Date.now() - startTime}ms`
 
   return res
+}
+
+const processLlmResponse = async (
+  res: string,
+  projectSettings: ProjectSettingsType,
+  messages: MessagesType
+): Promise<string> => {
+  try {
+    if (res.includes('$$llm-')) {
+      const llmId = res.match(/\$\$(.*?)\$\$/)?.[1]?.trim() || ''
+      const llm = projectSettings.llms[llmId]
+      if (!llm)
+        throw new Error(`LLM with id ${llmId} not found in project settings`)
+
+      const llmRes = await callLlm(llm, messages)
+      return processLlmResponse(llmRes, projectSettings, messages)
+    }
+    if (res.startsWith('$$api-')) return 'Api not implemented yet'
+
+    return res
+  } catch (e) {
+    return `Error processing LLM response: ${e}`
+  }
 }

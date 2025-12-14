@@ -5,11 +5,19 @@ export const models = ['google/gemma-3-27b-it:free']
 
 export const ask = async (
   llm: LlmType,
-  messages: MessagesType
+  userMessages: MessagesType
 ): Promise<string> => {
   try {
     const key = process.env.OPEN_ROUTER_KEY
     const url = process.env.OPEN_ROUTER_ENDPOINT || ''
+
+    const messages: MessagesType = [
+      {
+        role: 'user',
+        content: llm.prompt,
+      },
+      ...userMessages,
+    ]
 
     const options: RequestInit = {
       method: 'POST',

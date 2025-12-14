@@ -1,4 +1,4 @@
 export type MessagesType = {
-  role: 'bot' | 'user'
+  role: 'assistant' | 'user'
   content: string
 }[]

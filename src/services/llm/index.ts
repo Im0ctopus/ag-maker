@@ -13,8 +13,6 @@ export const loadModels = async () => {
 export const callLlm = async (llm: LlmType, messages: MessagesType) => {
   const model = llm.model
 
-  console.log(models.openRouter)
-
   if (models.openRouter?.includes(model))
     return await askOpenRouter(llm, messages)
 
