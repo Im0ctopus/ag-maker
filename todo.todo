@@ -3,8 +3,8 @@ todos:
   ✔ Design the agent settings (how and where are we gonna store the settings) @done(25-12-13 14:41)
     ✔ in a json @done(25-12-13 14:41)
       ✔ Have a json with all the agents(with the prompt and the model) and tools with its own settings @done(25-12-13 14:41)
-  ☐ Open router models @started(25-12-13 14:48)
-  ☐ Ask agents endpoint (POST)
-   ✔ Get project settings @done(25-12-13 16:04)
-   ☐ Speak with the llm provider
+  ✔ Open router models @started(25-12-13 14:48) @done(25-12-14 16:53) @lasted(1d2h5m24s)
+  ✔ Ask agents endpoint (POST) @done(25-12-14 16:53)
+   ✔ Get project settings @done(25-12-14 16:53)
+   ✔ Speak with the llm provider @done(25-12-14 16:53)
   ☐ Basic api tool

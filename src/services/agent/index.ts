@@ -14,14 +14,23 @@ export const processAgentRequest = async (
 
   const startTime = Date.now()
 
-  const entryLlmKey = Object.keys(projectSettings.llms).find(
-    (key) => projectSettings.llms[key]?.entry
-  )
-  const entryLlm = projectSettings.llms[entryLlmKey || '']
+  try {
+    const entryLlmKey = Object.keys(projectSettings.llms).find(
+      (key) => projectSettings.llms[key]?.entry
+    )
+    const entryLlm = projectSettings.llms[entryLlmKey || '']
 
-  if (!entryLlm) throw new Error('No entry LLM configured for this project')
+    if (!entryLlm) throw new Error('No entry LLM configured for this project')
 
-  await callLlm(entryLlm, messages)
+    const entryRes = await callLlm(entryLlm, messages)
+
+    // TODO: Process the response from the LLM and take actions accordingly
+
+    res.message = entryRes
+  } catch (e) {
+    res.success = false
+    res.message = `${e}`
+  }
 
   res.duration = `${Date.now() - startTime}ms`
 

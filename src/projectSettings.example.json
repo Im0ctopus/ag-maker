@@ -5,7 +5,7 @@
         "entry": true,
         "_comment": "TODO: When generation the config, we need to add the connected nodes to the prompt and explain what to do and when to use them.",
         "prompt": "You are an expert assistant. Provide detailed and accurate responses to user queries.",
-        "model": "gemini-3"
+        "model": "google/gemma-3-27b-it:free"
       },
       "llm-2": {
         "entry": false,
