@@ -8,4 +8,5 @@ todos:
    ✔ Get project settings @done(25-12-14 16:53)
    ✔ Speak with the llm provider @done(25-12-14 16:53)
   ✔ Multi llm node @done(25-12-14 17:39)
-   ☐ Basic api tool
+  ☐ Make good prompts and test the current multi node implementation
+  ☐ Basic api tool

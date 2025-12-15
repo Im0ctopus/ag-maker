@@ -1,7 +1,7 @@
 import type { MessagesType } from '../../../types/messages'
 import type { LlmType } from '../../../types/settings'
 
-export const models = ['google/gemma-3-27b-it:free']
+export const models = ['google/gemma-3-27b-it:free', 'openai/gpt-oss-20b:free']
 
 export const ask = async (
   llm: LlmType,
@@ -13,11 +13,17 @@ export const ask = async (
 
     const messages: MessagesType = [
       {
-        role: 'user',
+        role: 'system',
         content: llm.prompt,
       },
       ...userMessages,
     ]
+
+    const body = JSON.stringify({
+      model: llm.model,
+      messages,
+      stream: false,
+    })
 
     const options: RequestInit = {
       method: 'POST',
@@ -25,15 +31,12 @@ export const ask = async (
         Authorization: `Bearer ${key}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        model: llm.model,
-        messages,
-        stream: false,
-      }),
+      body,
     }
 
     const res = await fetch(url, options)
     const data = (await res.json()) as any
+    console.log(data)
     const message = data.choices[0].message.content
     if (!message) throw new Error('No message returned from OpenRouter LLM')
 
