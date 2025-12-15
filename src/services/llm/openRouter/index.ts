@@ -8,6 +8,8 @@ export const ask = async (
   userMessages: MessagesType
 ): Promise<string> => {
   try {
+    const startDate = Date.now()
+
     const key = process.env.OPEN_ROUTER_KEY
     const url = process.env.OPEN_ROUTER_ENDPOINT || ''
 
@@ -36,7 +38,13 @@ export const ask = async (
 
     const res = await fetch(url, options)
     const data = (await res.json()) as any
-    console.log(data)
+
+    console.info(
+      `--- OpenRouter's ${llm.model} response time: ${
+        Date.now() - startDate
+      } ms`
+    )
+
     const message = data.choices[0].message.content
     if (!message) throw new Error('No message returned from OpenRouter LLM')
 

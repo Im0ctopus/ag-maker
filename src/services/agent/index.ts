@@ -9,10 +9,8 @@ export const processAgentRequest = async (
   const res = {
     success: true,
     message: '',
-    duration: '',
+    duration: 0,
   }
-
-  const startTime = Date.now()
 
   try {
     const entryLlmKey = Object.keys(projectSettings.llms).find(
@@ -27,8 +25,6 @@ export const processAgentRequest = async (
     res.success = false
     res.message = `${e}`
   }
-
-  res.duration = `${Date.now() - startTime}ms`
 
   return res
 }

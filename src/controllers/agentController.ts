@@ -16,6 +16,8 @@ export const getModels = async (req: Request, res: Response) => {
 
 export const ask = async (req: Request, res: Response) => {
   try {
+    const startDate = Date.now()
+
     const { projectId, messages: messagesString } = req.body
 
     const messages = JSON.parse(messagesString)
@@ -24,6 +26,8 @@ export const ask = async (req: Request, res: Response) => {
       throw new Error(`No settings found for project ID ${projectId}`)
 
     const agentRes = await processAgentRequest(projectSettings, messages)
+
+    agentRes.duration = Date.now() - startDate
 
     return res.json({ success: true, message: agentRes })
   } catch (e) {
