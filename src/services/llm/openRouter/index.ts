@@ -40,7 +40,7 @@ export const ask = async (
     const data = (await res.json()) as any
 
     console.info(
-      `--- OpenRouter's ${llm.model} response time: ${
+      `-L- OpenRouter's ${llm.model} response time: ${
         Date.now() - startDate
       } ms`
     )

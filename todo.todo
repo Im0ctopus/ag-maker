@@ -9,9 +9,10 @@ todos:
    ✔ Speak with the llm provider @done(25-12-14 16:53)
   ✔ Multi llm node @done(25-12-14 17:39)
   ✔ Add google ai studio provider @done(25-12-15 16:41)
-  ☐ Make good prompts and test the current multi node implementation
-  ☐ Basic api tool
-
+  ✔ Make good prompts and test the current multi node implementation @done(25-12-15 16:43)
+  ✔ Basic api tool @started(25-12-17 16:27) @done(25-12-17 17:07) @lasted(40m48s)
+  ☐ Make a good return on the timings
+  ☐ Better error handling
 
 
 https://github.com/cheahjs/free-llm-api-resources/tree/main

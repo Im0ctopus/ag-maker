@@ -1,5 +1,6 @@
 import type { MessagesType } from '../../types/messages'
-import type { ProjectSettingsType } from '../../types/settings'
+import type { LlmType, ProjectSettingsType } from '../../types/settings'
+import { apiCall } from '../api'
 import { callLlm } from '../llm'
 
 export const processAgentRequest = async (
@@ -13,6 +14,13 @@ export const processAgentRequest = async (
   }
 
   try {
+    // FIXME: remove this. using for api implementation
+    // res.message = await apiCall(
+    //   projectSettings.apis['api-1'],
+    //   '$$api-1$$-##{"path":"/posts/100","method":"GET"}##',
+    //   'llm-4'
+    // )
+
     const entryLlmKey = Object.keys(projectSettings.llms).find(
       (key) => projectSettings.llms[key]?.entry
     )
@@ -20,7 +28,12 @@ export const processAgentRequest = async (
     if (!entryLlm) throw new Error('No entry LLM configured for this project')
 
     const entryRes = await callLlm(entryLlm, messages)
-    res.message = await processLlmResponse(entryRes, projectSettings, messages)
+    res.message = await processLlmResponse(
+      entryRes,
+      projectSettings,
+      messages,
+      entryLlm
+    )
   } catch (e) {
     res.success = false
     res.message = `${e}`
@@ -32,7 +45,8 @@ export const processAgentRequest = async (
 const processLlmResponse = async (
   res: string,
   projectSettings: ProjectSettingsType,
-  messages: MessagesType
+  messages: MessagesType,
+  caller: LlmType
 ): Promise<string> => {
   try {
     if (res.includes('$$llm-')) {
@@ -42,9 +56,18 @@ const processLlmResponse = async (
         throw new Error(`LLM with id ${llmId} not found in project settings`)
 
       const llmRes = await callLlm(llm, messages)
-      return processLlmResponse(llmRes, projectSettings, messages)
+      return processLlmResponse(llmRes, projectSettings, messages, llm)
     }
-    if (res.startsWith('$$api-')) return 'Api not implemented yet'
+    if (res.startsWith('$$api-')) {
+      const apiId = res.split('$$')[1] || ''
+      const api = projectSettings.apis[apiId]
+      if (!api)
+        throw new Error(`API with id ${apiId} not found in project settings`)
+
+      const apiRes = await apiCall(api, res, caller, messages)
+
+      return apiRes
+    }
 
     return res
   } catch (e) {

@@ -1,4 +1,3 @@
-import { text } from 'express'
 import type { MessagesType } from '../../../types/messages'
 import type { LlmType } from '../../../types/settings'
 
@@ -56,7 +55,7 @@ export const ask = async (
     const data = (await res.json()) as any
 
     console.info(
-      `--- Google's ${llm.model} response time: ${Date.now() - startDate} ms`
+      `-L- Google's ${llm.model} response time: ${Date.now() - startDate} ms`
     )
 
     const message = data.candidates[0].content.parts[0].text

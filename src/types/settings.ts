@@ -19,6 +19,7 @@ export type LlmType = {
 
 export type ApiType = {
   endpointUrl: string
+  description: string
   endpoints: {
     [endpointName: string]: {
       method: 'GET' | 'POST' | 'PUT' | 'DELETE'
