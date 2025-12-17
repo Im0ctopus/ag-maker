@@ -11,8 +11,11 @@ todos:
   ✔ Add google ai studio provider @done(25-12-15 16:41)
   ✔ Make good prompts and test the current multi node implementation @done(25-12-15 16:43)
   ✔ Basic api tool @started(25-12-17 16:27) @done(25-12-17 17:07) @lasted(40m48s)
-  ☐ Make a good return on the timings
+  ✔ Make a good return on the timings @started(25-12-17 21:04) @done(25-12-17 21:34) @lasted(30m10s)
   ☐ Better error handling
+  ☐ Streaming response (so it says "looking" when asking the api)
+    ☐ https://gist.github.com/montanaflynn/6a438f0be606daede899
+  ☐ Knowledge base
 
 
 https://github.com/cheahjs/free-llm-api-resources/tree/main

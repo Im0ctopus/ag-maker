@@ -16,8 +16,6 @@ export const apiCall = async (
 ) => {
   const startDate = Date.now()
 
-  console.log(requestData)
-
   const dataString = requestData.split('##')[1] || ''
   const data = JSON.parse(dataString) as ApiDataType
 
@@ -33,10 +31,9 @@ export const apiCall = async (
   const res = await fetch(`${apiData.endpointUrl}${data.path}`, options)
   const resData = JSON.stringify(await res.json())
 
+  const duration = Date.now() - startDate
   console.info(
-    `-A- API ${requestData.split('$$')[1]} response time: ${
-      Date.now() - startDate
-    } ms`
+    `-A- API ${requestData.split('$$')[1]} response time: ${duration} ms`
   )
 
   const newMessages: MessagesType = [
@@ -48,5 +45,5 @@ export const apiCall = async (
   ]
 
   const llmRes = await callLlm(caller, newMessages)
-  return llmRes
+  return { llmRes, duration }
 }

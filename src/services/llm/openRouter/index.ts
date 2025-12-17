@@ -3,10 +3,7 @@ import type { LlmType } from '../../../types/settings'
 
 export const models = ['google/gemma-3-27b-it:free', 'openai/gpt-oss-20b:free']
 
-export const ask = async (
-  llm: LlmType,
-  userMessages: MessagesType
-): Promise<string> => {
+export const ask = async (llm: LlmType, userMessages: MessagesType) => {
   try {
     const startDate = Date.now()
 
@@ -39,16 +36,15 @@ export const ask = async (
     const res = await fetch(url, options)
     const data = (await res.json()) as any
 
-    console.info(
-      `-L- OpenRouter's ${llm.model} response time: ${
-        Date.now() - startDate
-      } ms`
-    )
+    console.log(data)
+
+    const duration = Date.now() - startDate
+    console.info(`-L- OpenRouter's ${llm.model} response time: ${duration} ms`)
 
     const message = data.choices[0].message.content
     if (!message) throw new Error('No message returned from OpenRouter LLM')
 
-    return message
+    return { message, duration }
   } catch (e) {
     throw new Error(`OpenRouter LLM request failed: ${e}`)
   }

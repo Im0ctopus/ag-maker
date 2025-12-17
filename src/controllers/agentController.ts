@@ -27,7 +27,7 @@ export const ask = async (req: Request, res: Response) => {
 
     const agentRes = await processAgentRequest(projectSettings, messages)
 
-    agentRes.duration = Date.now() - startDate
+    agentRes.totalDuration = Date.now() - startDate
 
     return res.json({ success: true, message: agentRes })
   } catch (e) {

@@ -7,10 +7,7 @@ export const models = [
   'gemma-3-27b-it',
 ]
 
-export const ask = async (
-  llm: LlmType,
-  userMessages: MessagesType
-): Promise<string> => {
+export const ask = async (llm: LlmType, userMessages: MessagesType) => {
   try {
     const startDate = Date.now()
 
@@ -54,14 +51,13 @@ export const ask = async (
     const res = await fetch(url, options)
     const data = (await res.json()) as any
 
-    console.info(
-      `-L- Google's ${llm.model} response time: ${Date.now() - startDate} ms`
-    )
+    const duration = Date.now() - startDate
+    console.info(`-L- Google's ${llm.model} response time: ${duration} ms`)
 
     const message = data.candidates[0].content.parts[0].text
     if (!message) throw new Error('No message returned from Google LLM')
 
-    return message
+    return { message, duration }
   } catch (e) {
     throw new Error(`Google LLM request failed: ${e}`)
   }

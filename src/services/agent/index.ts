@@ -3,37 +3,49 @@ import type { LlmType, ProjectSettingsType } from '../../types/settings'
 import { apiCall } from '../api'
 import { callLlm } from '../llm'
 
+type ResType = {
+  success: boolean
+  message: string
+  totalDuration: number
+  detailedDurations: DurationsType
+}
+
+type DurationsType = {
+  [key: string]: number[]
+}
+
 export const processAgentRequest = async (
   projectSettings: ProjectSettingsType,
   messages: MessagesType
 ) => {
-  const res = {
+  const res: ResType = {
     success: true,
     message: '',
-    duration: 0,
+    totalDuration: 0,
+    detailedDurations: {},
   }
 
   try {
-    // FIXME: remove this. using for api implementation
-    // res.message = await apiCall(
-    //   projectSettings.apis['api-1'],
-    //   '$$api-1$$-##{"path":"/posts/100","method":"GET"}##',
-    //   'llm-4'
-    // )
+    const durations: DurationsType = {}
 
     const entryLlmKey = Object.keys(projectSettings.llms).find(
       (key) => projectSettings.llms[key]?.entry
     )
     const entryLlm = projectSettings.llms[entryLlmKey || '']
-    if (!entryLlm) throw new Error('No entry LLM configured for this project')
+    if (!entryLlm || !entryLlmKey)
+      throw new Error('No entry LLM configured for this project')
 
     const entryRes = await callLlm(entryLlm, messages)
+
+    durations[entryLlmKey] = [entryRes.duration]
     res.message = await processLlmResponse(
-      entryRes,
+      entryRes.message,
       projectSettings,
       messages,
-      entryLlm
+      { id: entryLlmKey, llm: entryLlm },
+      durations
     )
+    res.detailedDurations = durations
   } catch (e) {
     res.success = false
     res.message = `${e}`
@@ -46,7 +58,8 @@ const processLlmResponse = async (
   res: string,
   projectSettings: ProjectSettingsType,
   messages: MessagesType,
-  caller: LlmType
+  caller: { id: string; llm: LlmType },
+  durations: DurationsType
 ): Promise<string> => {
   try {
     if (res.includes('$$llm-')) {
@@ -56,7 +69,15 @@ const processLlmResponse = async (
         throw new Error(`LLM with id ${llmId} not found in project settings`)
 
       const llmRes = await callLlm(llm, messages)
-      return processLlmResponse(llmRes, projectSettings, messages, llm)
+
+      durations[llmId] = [...(durations[llmId] || []), llmRes.duration]
+      return processLlmResponse(
+        llmRes.message,
+        projectSettings,
+        messages,
+        { id: llmId, llm },
+        durations
+      )
     }
     if (res.startsWith('$$api-')) {
       const apiId = res.split('$$')[1] || ''
@@ -64,9 +85,14 @@ const processLlmResponse = async (
       if (!api)
         throw new Error(`API with id ${apiId} not found in project settings`)
 
-      const apiRes = await apiCall(api, res, caller, messages)
+      const apiRes = await apiCall(api, res, caller.llm, messages)
 
-      return apiRes
+      durations[caller.id] = [
+        ...(durations[caller.id] || []),
+        apiRes.llmRes.duration,
+      ]
+      durations[apiId] = [...(durations[apiId] || []), apiRes.duration]
+      return apiRes.llmRes.message
     }
 
     return res
