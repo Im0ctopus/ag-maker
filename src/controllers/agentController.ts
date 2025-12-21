@@ -29,7 +29,7 @@ export const ask = async (req: Request, res: Response) => {
 
     agentRes.totalDuration = Date.now() - startDate
 
-    return res.json({ success: true, message: agentRes })
+    return res.json(agentRes)
   } catch (e) {
     console.error(e)
     return res.status(500).json({ success: false, message: `${e}` })

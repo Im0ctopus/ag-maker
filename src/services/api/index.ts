@@ -25,8 +25,14 @@ export const apiCall = async (
     headers: {
       'Content-Type': 'application/json',
     },
-    body: data.body,
   }
+
+  if (
+    data.method !== 'GET' &&
+    data.method !== 'HEAD' &&
+    data.method !== 'OPTIONS'
+  )
+    options.body = data.body
 
   const res = await fetch(`${apiData.endpointUrl}${data.path}`, options)
   const resData = JSON.stringify(await res.json())

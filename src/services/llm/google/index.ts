@@ -51,14 +51,18 @@ export const ask = async (llm: LlmType, userMessages: MessagesType) => {
     const res = await fetch(url, options)
     const data = (await res.json()) as any
 
+    if (data.error) {
+      console.error(`EG- Google LLM error: ${data.error.message}`)
+      throw new Error(data.error.status)
+    }
+
     const duration = Date.now() - startDate
     console.info(`-L- Google's ${llm.model} response time: ${duration} ms`)
 
     const message = data.candidates[0].content.parts[0].text
-    if (!message) throw new Error('No message returned from Google LLM')
 
     return { message, duration }
-  } catch (e) {
-    throw new Error(`Google LLM request failed: ${e}`)
+  } catch (e: any) {
+    throw new Error(`Google LLM request failed - ${e.message}`)
   }
 }

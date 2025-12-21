@@ -36,7 +36,10 @@ export const ask = async (llm: LlmType, userMessages: MessagesType) => {
     const res = await fetch(url, options)
     const data = (await res.json()) as any
 
-    console.log(data)
+    if (data.error) {
+      console.error(`Error calling ${llm.model} - ${data.error.message}`)
+      throw new Error(`Error calling ${llm.model} - ${data.error.message}`)
+    }
 
     const duration = Date.now() - startDate
     console.info(`-L- OpenRouter's ${llm.model} response time: ${duration} ms`)
@@ -45,7 +48,7 @@ export const ask = async (llm: LlmType, userMessages: MessagesType) => {
     if (!message) throw new Error('No message returned from OpenRouter LLM')
 
     return { message, duration }
-  } catch (e) {
-    throw new Error(`OpenRouter LLM request failed: ${e}`)
+  } catch (e: any) {
+    throw new Error(`${e.message}`)
   }
 }

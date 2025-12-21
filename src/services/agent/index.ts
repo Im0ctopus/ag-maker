@@ -79,7 +79,7 @@ const processLlmResponse = async (
         durations
       )
     }
-    if (res.startsWith('$$api-')) {
+    if (res.includes('$$api-')) {
       const apiId = res.split('$$')[1] || ''
       const api = projectSettings.apis[apiId]
       if (!api)
@@ -97,6 +97,6 @@ const processLlmResponse = async (
 
     return res
   } catch (e) {
-    return `Error processing LLM response: ${e}`
+    return `${e}`
   }
 }
