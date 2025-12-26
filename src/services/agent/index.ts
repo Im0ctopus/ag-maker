@@ -85,14 +85,12 @@ const processLlmResponse = async (
       if (!api)
         throw new Error(`API with id ${apiId} not found in project settings`)
 
-      const apiRes = await apiCall(api, res, caller.llm, messages)
+      const apiRes = await apiCall(api, res, messages)
+      const llmRes = await callLlm(caller.llm, apiRes.newMessages)
 
-      durations[caller.id] = [
-        ...(durations[caller.id] || []),
-        apiRes.llmRes.duration,
-      ]
+      durations[caller.id] = [...(durations[caller.id] || []), llmRes.duration]
       durations[apiId] = [...(durations[apiId] || []), apiRes.duration]
-      return apiRes.llmRes.message
+      return llmRes.message
     }
 
     return res

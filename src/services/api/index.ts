@@ -1,6 +1,5 @@
 import type { MessagesType } from '../../types/messages'
-import type { ApiType, LlmType } from '../../types/settings'
-import { callLlm } from '../llm'
+import type { ApiType } from '../../types/settings'
 
 type ApiDataType = {
   path: string
@@ -11,7 +10,6 @@ type ApiDataType = {
 export const apiCall = async (
   apiData: ApiType,
   requestData: string,
-  caller: LlmType,
   messages: MessagesType
 ) => {
   const startDate = Date.now()
@@ -50,6 +48,5 @@ export const apiCall = async (
     },
   ]
 
-  const llmRes = await callLlm(caller, newMessages)
-  return { llmRes, duration }
+  return { newMessages, duration }
 }

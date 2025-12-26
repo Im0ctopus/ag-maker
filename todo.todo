@@ -12,9 +12,15 @@ todos:
   ✔ Make good prompts and test the current multi node implementation @done(25-12-15 16:43)
   ✔ Basic api tool @started(25-12-17 16:27) @done(25-12-17 17:07) @lasted(40m48s)
   ✔ Make a good return on the timings @started(25-12-17 21:04) @done(25-12-17 21:34) @lasted(30m10s)
-  ☐ Better error handling
-  ☐ Streaming response (so it says "looking" when asking the api)
-    ☐ https://gist.github.com/montanaflynn/6a438f0be606daede899
+  ✔ Better error handling @done(25-12-21 15:20)
+  ✔ Learn AsyncGenerator and stream stuff @started(25-12-24 15:54) @done(25-12-26 20:15) @lasted(2d4h21m50s)
+  ✔ Streaming response @done(25-12-26 19:52)
+    ✔ https://gist.github.com/montanaflynn/6a438f0be606daede899 @done(25-12-21 22:10)
+    ✔ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncGenerator#async_generator_iteration @done(25-12-26 19:52)
+  ✔ Stream actions (so it says "looking" when asking the api) @done(25-12-26 20:15)
+  ☐ Return used tokens
+  ☐ Auth
+  ☐ Stream for open router
   ☐ Knowledge base
 
 
