@@ -84,10 +84,7 @@ const processStreamLlmResponse = async (
         continue
       } else if (value !== '') value = null
 
-      if (chunk.finishReason) {
-        finishReason = chunk.finishReason
-        continue
-      }
+      if (chunk.finishReason) finishReason = chunk.finishReason
 
       response.write(streamIt(chunk))
     }

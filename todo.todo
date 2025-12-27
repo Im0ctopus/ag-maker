@@ -18,10 +18,11 @@ todos:
     ✔ https://gist.github.com/montanaflynn/6a438f0be606daede899 @done(25-12-21 22:10)
     ✔ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncGenerator#async_generator_iteration @done(25-12-26 19:52)
   ✔ Stream actions (so it says "looking" when asking the api) @done(25-12-26 20:15)
-  ☐ Return used tokens
-  ☐ Auth
-  ☐ Stream for open router
-  ☐ Knowledge base
+  ☐ @high Return used tokens
+  ☐ @low Auth
+  ☐ @low Stream for open router
+  ☐ @high Knowledge base
+  ☐ @critical Endpoint to store data from the usage (called after the "conversation" ends)
 
 
 https://github.com/cheahjs/free-llm-api-resources/tree/main

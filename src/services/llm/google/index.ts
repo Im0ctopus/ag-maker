@@ -1,7 +1,6 @@
 import type { GeneratorType } from '../../../types/generator'
 import type { MessagesType } from '../../../types/messages'
 import type { LlmType } from '../../../types/settings'
-import { streamIt } from '../../../utils/streamIt'
 
 export const models = [
   'gemini-2.5-flash',
