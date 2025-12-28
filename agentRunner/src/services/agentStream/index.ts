@@ -1,20 +1,26 @@
 import type { GeneratorType } from '../../types/generator'
 import type { MessagesType } from '../../types/messages'
 import type { LlmType, ProjectSettingsType } from '../../types/settings'
+import type { Usage } from '../../types/usage'
 import { streamIt } from '../../utils/streamIt'
 import { apiCall } from '../api'
 import { callLlmStream } from '../llm'
 import { type Response } from 'express'
+
+type DurationsType = {
+  [key: string]: number[]
+}
+
+type AgentUsage = {
+  [key: string]: Usage[]
+}
 
 type ResType = {
   finishReason: 'STOP' | 'ERROR'
   message?: string
   totalDuration: number
   detailedDurations: DurationsType
-}
-
-type DurationsType = {
-  [key: string]: number[]
+  usage: AgentUsage
 }
 
 export const processAgentStreamRequest = async (
@@ -26,10 +32,12 @@ export const processAgentStreamRequest = async (
     finishReason: 'STOP',
     totalDuration: 0,
     detailedDurations: {},
+    usage: {},
   }
 
   try {
     const durations: DurationsType = {}
+    const usage: AgentUsage = {}
 
     const entryLlmKey = Object.keys(projectSettings.llms).find(
       (key) => projectSettings.llms[key]?.entry
@@ -49,11 +57,13 @@ export const processAgentStreamRequest = async (
         llm: entryLlm,
       },
       durations,
+      usage,
       response
     )
 
     res.detailedDurations = durations
     res.finishReason = llmRes.finishReason
+    res.usage = usage
   } catch (e) {
     res.finishReason = 'ERROR'
     res.message = `${e}`
@@ -67,6 +77,7 @@ const processStreamLlmResponse = async (
   messages: MessagesType,
   caller: { id: string; llm: LlmType },
   durations: DurationsType,
+  usage: AgentUsage,
   response: Response
 ): Promise<{ finishReason: 'ERROR' | 'STOP' }> => {
   try {
@@ -76,6 +87,8 @@ const processStreamLlmResponse = async (
     for await (const chunk of stream) {
       if (chunk.duration)
         durations[caller.id] = [...(durations[caller.id] || []), chunk.duration]
+      if (chunk.usage)
+        usage[caller.id] = [...(usage[caller.id] || []), chunk.usage]
 
       if (value || (value === undefined && chunk.message.includes('$'))) {
         value = value + chunk.message
@@ -104,6 +117,7 @@ const processStreamLlmResponse = async (
         messages,
         { id: llmId, llm },
         durations,
+        usage,
         response
       )
     }
@@ -115,7 +129,6 @@ const processStreamLlmResponse = async (
         throw new Error(`API with id ${apiId} not found in project settings`)
       response.write(streamIt({ action: `Calling ${apiId}...` }))
       const apiRes = await apiCall(api, value, messages)
-      durations[caller.id] = [...(durations[caller.id] || [])]
       durations[apiId] = [...(durations[apiId] || []), apiRes.duration]
       response.write(streamIt({ action: `Calling ${caller.id}...` }))
       const llmRes = callLlmStream(caller.llm, apiRes.newMessages)
@@ -125,6 +138,7 @@ const processStreamLlmResponse = async (
         messages,
         caller,
         durations,
+        usage,
         response
       )
     }

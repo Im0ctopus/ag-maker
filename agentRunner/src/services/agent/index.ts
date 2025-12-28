@@ -1,17 +1,23 @@
 import type { MessagesType } from '../../types/messages'
 import type { LlmType, ProjectSettingsType } from '../../types/settings'
+import { type Usage } from '../../types/usage'
 import { apiCall } from '../api'
 import { callLlm } from '../llm'
+
+type DurationsType = {
+  [key: string]: number[]
+}
+
+type AgentUsage = {
+  [key: string]: Usage[]
+}
 
 type ResType = {
   success: boolean
   message: string
   totalDuration: number
   detailedDurations: DurationsType
-}
-
-type DurationsType = {
-  [key: string]: number[]
+  usage: AgentUsage
 }
 
 export const processAgentRequest = async (
@@ -23,10 +29,12 @@ export const processAgentRequest = async (
     message: '',
     totalDuration: 0,
     detailedDurations: {},
+    usage: {},
   }
 
   try {
     const durations: DurationsType = {}
+    const usage: AgentUsage = {}
 
     const entryLlmKey = Object.keys(projectSettings.llms).find(
       (key) => projectSettings.llms[key]?.entry
@@ -38,14 +46,17 @@ export const processAgentRequest = async (
     const entryRes = await callLlm(entryLlm, messages)
 
     durations[entryLlmKey] = [entryRes.duration]
+    if (entryRes.usage) usage[entryLlmKey] = [entryRes.usage]
     res.message = await processLlmResponse(
       entryRes.message,
       projectSettings,
       messages,
       { id: entryLlmKey, llm: entryLlm },
-      durations
+      durations,
+      usage
     )
     res.detailedDurations = durations
+    res.usage = usage
   } catch (e: any) {
     res.success = false
     res.message = `${e.message}`
@@ -59,7 +70,8 @@ const processLlmResponse = async (
   projectSettings: ProjectSettingsType,
   messages: MessagesType,
   caller: { id: string; llm: LlmType },
-  durations: DurationsType
+  durations: DurationsType,
+  usage: AgentUsage
 ): Promise<string> => {
   if (res.includes('$$llm-')) {
     const llmId = res.match(/\$\$(.*?)\$\$/)?.[1]?.trim() || ''
@@ -70,12 +82,14 @@ const processLlmResponse = async (
     const llmRes = await callLlm(llm, messages)
 
     durations[llmId] = [...(durations[llmId] || []), llmRes.duration]
+    if (llmRes.usage) usage[llmId] = [...(usage[llmId] || []), llmRes.usage]
     return processLlmResponse(
       llmRes.message,
       projectSettings,
       messages,
       { id: llmId, llm },
-      durations
+      durations,
+      usage
     )
   }
   if (res.includes('$$api-')) {
@@ -88,6 +102,8 @@ const processLlmResponse = async (
     const llmRes = await callLlm(caller.llm, apiRes.newMessages)
 
     durations[caller.id] = [...(durations[caller.id] || []), llmRes.duration]
+    if (llmRes.usage)
+      usage[caller.id] = [...(usage[caller.id] || []), llmRes.usage]
     durations[apiId] = [...(durations[apiId] || []), apiRes.duration]
     return llmRes.message
   }
