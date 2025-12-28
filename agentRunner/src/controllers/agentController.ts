@@ -1,6 +1,5 @@
 import { type Request, type Response } from 'express'
 import { getSettings } from '../utils/getSettings'
-import { loadModels } from '../services/llm'
 import { processAgentRequest } from '../services/agent'
 import { streamIt } from '../utils/streamIt'
 import { processAgentStreamRequest } from '../services/agentStream'
@@ -9,11 +8,6 @@ import { processAgentStreamRequest } from '../services/agentStream'
 const settings = await getSettings()
 if (!settings) {
   throw new Error('Failed to load settings')
-}
-
-export const getModels = async (req: Request, res: Response) => {
-  const models = await loadModels()
-  res.json(models)
 }
 
 export const ask = async (req: Request, res: Response) => {

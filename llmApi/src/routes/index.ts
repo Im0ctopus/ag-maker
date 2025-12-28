@@ -1,4 +1,4 @@
-import { agentRouter } from './agentRoute'
-import { streamRouter } from './streamRoute'
+import { askRouter } from './askRoute'
+import { askStreamRouter } from './askStreamRoute'
 
-export { agentRouter, streamRouter }
+export { askRouter, askStreamRouter }

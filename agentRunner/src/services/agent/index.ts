@@ -46,9 +46,9 @@ export const processAgentRequest = async (
       durations
     )
     res.detailedDurations = durations
-  } catch (e) {
+  } catch (e: any) {
     res.success = false
-    res.message = `${e}`
+    res.message = `${e.message}`
   }
 
   return res
@@ -61,40 +61,36 @@ const processLlmResponse = async (
   caller: { id: string; llm: LlmType },
   durations: DurationsType
 ): Promise<string> => {
-  try {
-    if (res.includes('$$llm-')) {
-      const llmId = res.match(/\$\$(.*?)\$\$/)?.[1]?.trim() || ''
-      const llm = projectSettings.llms[llmId]
-      if (!llm)
-        throw new Error(`LLM with id ${llmId} not found in project settings`)
+  if (res.includes('$$llm-')) {
+    const llmId = res.match(/\$\$(.*?)\$\$/)?.[1]?.trim() || ''
+    const llm = projectSettings.llms[llmId]
+    if (!llm)
+      throw new Error(`LLM with id ${llmId} not found in project settings`)
 
-      const llmRes = await callLlm(llm, messages)
+    const llmRes = await callLlm(llm, messages)
 
-      durations[llmId] = [...(durations[llmId] || []), llmRes.duration]
-      return processLlmResponse(
-        llmRes.message,
-        projectSettings,
-        messages,
-        { id: llmId, llm },
-        durations
-      )
-    }
-    if (res.includes('$$api-')) {
-      const apiId = res.split('$$')[1] || ''
-      const api = projectSettings.apis[apiId]
-      if (!api)
-        throw new Error(`API with id ${apiId} not found in project settings`)
-
-      const apiRes = await apiCall(api, res, messages)
-      const llmRes = await callLlm(caller.llm, apiRes.newMessages)
-
-      durations[caller.id] = [...(durations[caller.id] || []), llmRes.duration]
-      durations[apiId] = [...(durations[apiId] || []), apiRes.duration]
-      return llmRes.message
-    }
-
-    return res
-  } catch (e) {
-    return `${e}`
+    durations[llmId] = [...(durations[llmId] || []), llmRes.duration]
+    return processLlmResponse(
+      llmRes.message,
+      projectSettings,
+      messages,
+      { id: llmId, llm },
+      durations
+    )
   }
+  if (res.includes('$$api-')) {
+    const apiId = res.split('$$')[1] || ''
+    const api = projectSettings.apis[apiId]
+    if (!api)
+      throw new Error(`API with id ${apiId} not found in project settings`)
+
+    const apiRes = await apiCall(api, res, messages)
+    const llmRes = await callLlm(caller.llm, apiRes.newMessages)
+
+    durations[caller.id] = [...(durations[caller.id] || []), llmRes.duration]
+    durations[apiId] = [...(durations[apiId] || []), apiRes.duration]
+    return llmRes.message
+  }
+
+  return res
 }

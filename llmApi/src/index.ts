@@ -1,13 +1,18 @@
 import express from 'express'
-import { agentRouter, streamRouter } from './routes'
-import { streamMiddleware } from '../utils/streamMiddleware'
+import { askRouter, askStreamRouter } from './routes'
+import { loadModels } from './controllers/askController'
+import { loadModels as loadStreamModels } from './controllers/askStreamController'
 
 const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 8000
+
+// Initial load of LLM models
+loadModels()
+loadStreamModels()
 
 // General MiddleWare
 // We can also use the middleware only for specific routes if needed like the stream route below
@@ -24,8 +29,8 @@ app.use((req, res, next) => {
 })
 
 // Routes
-app.use('/agent', agentRouter)
-app.use('/stream', streamMiddleware, streamRouter)
+app.use('/ask', askRouter)
+app.use('/ask-stream', askStreamRouter)
 
 // Default route
 app.get('/', (req, res) => {
@@ -34,7 +39,7 @@ app.get('/', (req, res) => {
 
 // Start server
 const server = app.listen(port, () => {
-  console.log(`App listening on port ${port}`)
+  console.info(`App listening on port ${port}`)
 })
 
 server.on('error', (error: NodeJS.ErrnoException) => {

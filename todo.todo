@@ -18,10 +18,10 @@ todos:
     ✔ https://gist.github.com/montanaflynn/6a438f0be606daede899 @done(25-12-21 22:10)
     ✔ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncGenerator#async_generator_iteration @done(25-12-26 19:52)
   ✔ Stream actions (so it says "looking" when asking the api) @done(25-12-26 20:15)
-  ☐ Create a new api for the llmCalls
-    ☐ The llm service will only call the llmApi and process the answer with a generator
-    ☐ The current service implementation will be moved to llmApi
-    ☐ Add a token auth to this, this token should be "per project/user"
+  ✔ Create a new api for the llmCalls @started(25-12-27 17:41) @done(25-12-28 00:00) @lasted(6h19m9s)
+    ✔ The llm service will only call the llmApi and process the answer with a generator @done(25-12-28 00:00)
+    ✔ The current service implementation will be moved to llmApi @done(25-12-28 00:00)
+    ✔ Add a token auth to this, this token should be "per project/user" @done(25-12-28 00:00)
   ☐ Used tokens
   ☐ Add env option to send the timing and tokens information (something with dev)
   ☐ Frontend to talk with the agent (with timings and tokens showing IF received)

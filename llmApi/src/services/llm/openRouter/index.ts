@@ -10,6 +10,9 @@ export const ask = async (llm: LlmType, userMessages: MessagesType) => {
     const key = process.env.OPEN_ROUTER_KEY
     const url = process.env.OPEN_ROUTER_ENDPOINT || ''
 
+    if (!key || !process.env.OPEN_ROUTER_ENDPOINT)
+      throw new Error('OpenRouter LLM not properly configured')
+
     const messages: MessagesType = [
       {
         role: 'system',

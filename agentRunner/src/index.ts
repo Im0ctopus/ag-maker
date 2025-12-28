@@ -1,6 +1,5 @@
 import express from 'express'
 import { agentRouter } from './routes/agentRoute'
-import { loadModels } from './services/llm'
 
 const app = express()
 
@@ -8,9 +7,6 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 const port = process.env.PORT || 3000
-
-// Initial load of LLM models
-loadModels()
 
 // Routes
 app.use('/agent', agentRouter)
@@ -21,7 +17,7 @@ app.get('/', (req, res) => {
 })
 
 const server = app.listen(port, () => {
-  console.log(`App listening on port ${port}`)
+  console.info(`App listening on port ${port}`)
 })
 
 server.on('error', (error: NodeJS.ErrnoException) => {

@@ -38,9 +38,8 @@ export const processAgentStreamRequest = async (
     if (!entryLlm || !entryLlmKey)
       throw new Error('No entry LLM configured for this project')
 
-    // We need to define "stream" first since callLlmStream is a function that returns an async generator aka middle man
-    const stream = await callLlmStream(entryLlm, messages)
-
+    response.write(streamIt({ action: `Calling entry ${entryLlmKey}...` }))
+    const stream = callLlmStream(entryLlm, messages)
     const llmRes = await processStreamLlmResponse(
       stream,
       projectSettings,
@@ -84,7 +83,10 @@ const processStreamLlmResponse = async (
         continue
       } else if (value !== '') value = null
 
-      if (chunk.finishReason) finishReason = chunk.finishReason
+      if (chunk.finishReason) {
+        finishReason = chunk.finishReason
+        continue
+      }
 
       response.write(streamIt(chunk))
     }
@@ -95,7 +97,7 @@ const processStreamLlmResponse = async (
       if (!llm)
         throw new Error(`LLM with id ${llmId} not found in project settings`)
       response.write(streamIt({ action: `Calling ${llmId}...` }))
-      const llmRes = await callLlmStream(llm, messages)
+      const llmRes = callLlmStream(llm, messages)
       return await processStreamLlmResponse(
         llmRes,
         projectSettings,
@@ -116,7 +118,7 @@ const processStreamLlmResponse = async (
       durations[caller.id] = [...(durations[caller.id] || [])]
       durations[apiId] = [...(durations[apiId] || []), apiRes.duration]
       response.write(streamIt({ action: `Calling ${caller.id}...` }))
-      const llmRes = await callLlmStream(caller.llm, apiRes.newMessages)
+      const llmRes = callLlmStream(caller.llm, apiRes.newMessages)
       return await processStreamLlmResponse(
         llmRes,
         projectSettings,

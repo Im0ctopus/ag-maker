@@ -17,6 +17,9 @@ export const ask = async (llm: LlmType, userMessages: MessagesType) => {
       llm.model
     }:generateContent`
 
+    if (!key || !process.env.GOOGLE_ENDPOINT)
+      throw new Error('Google LLM not properly configured')
+
     const contents = [
       {
         role: 'user',
@@ -79,6 +82,9 @@ export async function* askStream(
     const url = `${process.env.GOOGLE_ENDPOINT || ''}${
       llm.model
     }:streamGenerateContent?alt=sse`
+
+    if (!key || !process.env.GOOGLE_ENDPOINT)
+      throw new Error('Google LLM not properly configured')
 
     const contents = [
       {
