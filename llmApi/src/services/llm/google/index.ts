@@ -1,6 +1,7 @@
 import type { GeneratorType } from '../../../types/generator'
 import type { MessagesType } from '../../../types/messages'
 import type { LlmType } from '../../../types/settings'
+import type { Usage } from '../../../types/usage'
 
 export const models = [
   'gemini-2.5-flash',
@@ -9,13 +10,12 @@ export const models = [
 ]
 
 export const ask = async (llm: LlmType, userMessages: MessagesType) => {
+  const model = llm.model
   try {
     const startDate = Date.now()
 
     const key = process.env.GOOGLE_KEY
-    const url = `${process.env.GOOGLE_ENDPOINT || ''}${
-      llm.model
-    }:generateContent`
+    const url = `${process.env.GOOGLE_ENDPOINT || ''}${model}:generateContent`
 
     if (!key || !process.env.GOOGLE_ENDPOINT)
       throw new Error('Google LLM not properly configured')
@@ -61,11 +61,17 @@ export const ask = async (llm: LlmType, userMessages: MessagesType) => {
     }
 
     const duration = Date.now() - startDate
-    console.info(`-L- Google's ${llm.model} response time: ${duration} ms`)
+    console.info(`-L- Google's ${model} response time: ${duration} ms`)
 
     const message = data.candidates[0].content.parts[0].text
 
-    return { message, duration }
+    const usage: Usage = {
+      promptTokens: data.usageMetadata?.promptTokenCount || 0,
+      completionTokens: data.usageMetadata?.completionTokenCount || 0,
+      totalTokens: data.usageMetadata?.totalTokenCount || 0,
+    }
+
+    return { model: model, message, duration, usage }
   } catch (e: any) {
     throw new Error(`Google LLM request failed - ${e.message}`)
   }
@@ -75,13 +81,14 @@ export async function* askStream(
   llm: LlmType,
   userMessages: MessagesType
 ): AsyncGenerator<GeneratorType> {
+  const model = llm.model
   try {
     const startDate = Date.now()
 
     const key = process.env.GOOGLE_KEY
-    const url = `${process.env.GOOGLE_ENDPOINT || ''}${
-      llm.model
-    }:streamGenerateContent?alt=sse`
+    const url = `${
+      process.env.GOOGLE_ENDPOINT || ''
+    }${model}:streamGenerateContent?alt=sse`
 
     if (!key || !process.env.GOOGLE_ENDPOINT)
       throw new Error('Google LLM not properly configured')
@@ -130,6 +137,11 @@ export async function* askStream(
     const decoder = new TextDecoder()
     let buffer = ''
     let finish: 'STOP' | 'ERROR' = 'STOP'
+    let usage: Usage = {
+      promptTokens: 0,
+      completionTokens: 0,
+      totalTokens: 0,
+    }
 
     while (true) {
       const { done, value } = await reader.read()
@@ -146,14 +158,21 @@ export async function* askStream(
           try {
             const data = JSON.parse(res)
             const text = data.candidates?.[0]?.content?.parts?.[0]?.text
-            const finishReason = data.candidates?.[0]?.content?.finishReason
+            const finishReason = data.candidates?.[0]?.finishReason
 
             if (text)
               yield {
+                model,
                 message: text as string,
               }
-            if (finishReason)
+            if (finishReason) {
               finish = finishReason === 'STOP' ? 'STOP' : 'ERROR'
+              usage = {
+                promptTokens: data.usageMetadata?.promptTokenCount || 0,
+                completionTokens: data.usageMetadata?.completionTokenCount || 0,
+                totalTokens: data.usageMetadata?.totalTokenCount || 0,
+              }
+            }
           } catch (e) {
             // This empty catch is intentional to avoid breaking the stream on JSON parse errors
           }
@@ -162,14 +181,17 @@ export async function* askStream(
     }
 
     const duration = Date.now() - startDate
-    console.info(`-L- Google's ${llm.model} response time: ${duration} ms`)
+    console.info(`-L- Google's ${model} response time: ${duration} ms`)
     yield {
+      model,
       message: '',
       finishReason: finish,
       duration,
+      usage,
     }
   } catch (e: any) {
     yield {
+      model,
       finishReason: 'ERROR',
       message: `Google LLM request failed - ${e.message}`,
     }

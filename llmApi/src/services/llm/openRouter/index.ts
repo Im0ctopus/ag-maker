@@ -1,7 +1,8 @@
 import type { MessagesType } from '../../../types/messages'
 import type { LlmType } from '../../../types/settings'
+import type { Usage } from '../../../types/usage'
 
-export const models = ['google/gemma-3-27b-it:free', 'openai/gpt-oss-20b:free']
+export const models = ['google/gemma-3-27b-it:free']
 
 export const ask = async (llm: LlmType, userMessages: MessagesType) => {
   try {
@@ -50,7 +51,13 @@ export const ask = async (llm: LlmType, userMessages: MessagesType) => {
     const message = data.choices[0].message.content
     if (!message) throw new Error('No message returned from OpenRouter LLM')
 
-    return { message, duration }
+    const usage: Usage = {
+      promptTokens: data.usage?.prompt_tokens || 0,
+      completionTokens: data.usage?.completion_tokens || 0,
+      totalTokens: data.usage?.total_tokens || 0,
+    }
+
+    return { model: llm.model, message, duration, usage }
   } catch (e: any) {
     throw new Error(`${e.message}`)
   }

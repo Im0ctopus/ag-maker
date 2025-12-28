@@ -1,6 +1,7 @@
 import type { GeneratorType } from '../../types/generator'
 import type { MessagesType } from '../../types/messages'
 import type { LlmType } from '../../types/settings'
+import type { Usage } from '../../types/usage'
 
 export const callLlm = async (llm: LlmType, messages: MessagesType) => {
   const startDate = Date.now()
@@ -31,11 +32,16 @@ export const callLlm = async (llm: LlmType, messages: MessagesType) => {
     throw new Error(`${data.message}`)
   }
 
-  const data = (await res.json()) as { message: string; duration: number }
+  const data = (await res.json()) as GeneratorType
+  const message = data.message
+  const usage = data.usage
+  const duration = Date.now() - startDate
+  console.info(`-L- ${llm.model} response time: ${duration} ms`)
 
   return {
-    message: data.message,
-    duration: Date.now() - startDate,
+    message,
+    duration,
+    usage,
   }
 }
 
@@ -74,7 +80,13 @@ export async function* callLlmStream(
   const reader = res.body.getReader()
   const decoder = new TextDecoder()
   let buffer = ''
+  let model: string = llm.model
   let finish: 'STOP' | 'ERROR' = 'STOP'
+  let usage: Usage = {
+    promptTokens: 0,
+    completionTokens: 0,
+    totalTokens: 0,
+  }
 
   while (true) {
     const { done, value } = await reader.read()
@@ -91,12 +103,15 @@ export async function* callLlmStream(
         try {
           const data = JSON.parse(res)
           const message = data.message as string
+          const llmUsage = data.usage
+          model = data.model
           const finishReason = data.finishReason
 
           yield {
             message,
           }
           if (finishReason) finish = finishReason === 'STOP' ? 'STOP' : 'ERROR'
+          if (llmUsage) usage = llmUsage
         } catch (e) {
           // This empty catch is intentional to avoid breaking the stream on JSON parse errors
         }
@@ -110,5 +125,6 @@ export async function* callLlmStream(
     message: '',
     finishReason: finish,
     duration,
+    usage,
   }
 }
