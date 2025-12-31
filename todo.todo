@@ -24,8 +24,9 @@ todos:
     ✔ Add a token auth to this, this token should be "per project/user" @done(25-12-28 00:00)
   ✔ Used tokens @done(25-12-28 16:34)
   ✔ Agent return used tokens @done(25-12-28 16:48)
-  ☐ Add env option to send the timing and tokens information (something with dev) @started(25-12-28 16:48)
-  ☐ Frontend to talk with the agent (with timings and tokens showing IF received)
+  ✔ Add env option to send the timing and tokens information (something with dev) @started(25-12-28 16:48) @done(25-12-31 16:56) @lasted(3d8m50s)
+  ☐ Frontend to talk with the agent (with timings and tokens showing IF received) @started(25-12-31 16:58)
+  ☐ Start backOffice/main app project
   ☐ Endpoint to store data from the usage - make a call to the main app with the project token(uuid)
     ☐ Chats - agentApi
     ☐ Timings - agentApi

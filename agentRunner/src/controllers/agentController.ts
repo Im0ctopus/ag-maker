@@ -25,7 +25,14 @@ export const ask = async (req: Request, res: Response) => {
 
     agentRes.totalDuration = Date.now() - startDate
 
-    res.json(agentRes)
+    let finalRes = {
+      success: agentRes.success,
+      message: agentRes.message,
+    }
+
+    if (process.env.DEV_MODE === 'true') finalRes = agentRes
+
+    res.json(finalRes)
   } catch (e) {
     console.error(e)
     res.status(500).json({ success: false, message: `${e}` })
@@ -51,7 +58,15 @@ export const askStream = async (req: Request, res: Response) => {
 
     agentRes.totalDuration = Date.now() - startDate
 
-    res.write(streamIt({ ...agentRes }))
+    let finalRes = {
+      finishReason: agentRes.finishReason,
+      message: agentRes.message,
+    }
+
+    if (process.env.DEV_MODE === 'true')
+      finalRes = { ...agentRes, message: agentRes.message }
+
+    res.write(streamIt(finalRes))
   } catch (e) {
     console.error(e)
     res.write(streamIt({ finishReason: 'ERROR', message: e }))
