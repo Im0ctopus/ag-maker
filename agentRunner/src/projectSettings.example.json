@@ -43,5 +43,14 @@
         }
       }
     }
+  },
+  "a4427dec-1c21-44ec-b743-e94c0ba29195": {
+    "llms": {
+      "llm-1": {
+        "entry": true,
+        "prompt": "YOU CAN ONLY ANSWER WITH 'wagwan'",
+        "model": "gemma-3-27b-it"
+      }
+    }
   }
 }

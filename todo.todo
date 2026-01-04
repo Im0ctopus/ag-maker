@@ -1,4 +1,40 @@
+# Projects TODO list HeHe
+
+
+
+
+
 todos:
+  ☐ Frontend to talk with the agent (with timings and tokens showing IF received) - https://t3.chat/ @started(25-12-31 16:58)
+    ✔ Preferences menu/button @started(26-01-01 16:52) @done(26-01-04 19:38) @lasted(3d2h46m26s)
+      ✔ Theming @done(26-01-04 19:38)
+    ✔ Sidebar - Instead of a "chat" you have multiple agents on the sidebar @started(26-01-04 19:38) @done(26-01-04 20:03) @lasted(25m3s)
+      ✔ All the agents on that the user "asked" for will be there @done(26-01-04 20:02)
+        ☐ With this the chat app, and others, will be on a "page" for interfaces, where you can have multiple and deploy them as you want
+      ✔ If there is only one agent don't show sidebar/options to change @done(26-01-04 19:38)
+      ☐ @low fix the sidebar localstorage "wait"
+  ☐ Start backOffice/main app project
+  ☐ Endpoint to store data from the usage - make a call to the main app with the project token(uuid)
+    ☐ Chats - agentApi
+    ☐ Timings - agentApi
+    ☐ Used tokens - llmApi
+  ☐ BackOffice (so much work holy)
+    ☐ Interfaces page(you can manually redeploy an interface)
+  ☐ Conversation summary only when the user asks for it (it can be expensive)
+  ☐ Intentions need to be checked every 10/15 minutes on conversations with more than X messages and 10m+ old
+    ☐ Auth @low
+  ☐ Stream for open router @low
+  ☐ Knowledge base (we need a models to embed the data) @low
+    ☐ https://docs.trychroma.com/docs/overview/getting-started?lang=typescript
+    ☐ https://ollama.com/library/nomic-embed-text
+
+Possible:
+  ☐ Have a history btn on the interfaces to get some/all history with that agent
+
+
+https://github.com/cheahjs/free-llm-api-resources/tree/main
+
+done done:
   ✔ Basic express app @done(25-12-08 15:49)
   ✔ Design the agent settings (how and where are we gonna store the settings) @done(25-12-13 14:41)
     ✔ in a json @done(25-12-13 14:41)
@@ -25,27 +61,3 @@ todos:
   ✔ Used tokens @done(25-12-28 16:34)
   ✔ Agent return used tokens @done(25-12-28 16:48)
   ✔ Add env option to send the timing and tokens information (something with dev) @started(25-12-28 16:48) @done(25-12-31 16:56) @lasted(3d8m50s)
-  ☐ Frontend to talk with the agent (with timings and tokens showing IF received) @started(25-12-31 16:58)
-    ☐ https://t3.chat/
-    ☐ Instead of a "chat" you have multiple agents on the sidebar
-      ☐ All the agents on that the user "asked" for will be there
-        ☐ With this the chat app, and others, will be on a "page" for interfaces, where you can have multiple and deploy them as you want
-      ☐ If there is only one agent don't show sidebar/options to change
-  ☐ Start backOffice/main app project
-  ☐ Endpoint to store data from the usage - make a call to the main app with the project token(uuid)
-    ☐ Chats - agentApi
-    ☐ Timings - agentApi
-    ☐ Used tokens - llmApi
-  ☐ BackOffice (so much work holy)
-    ☐ Interfaces page(you can manually redeploy an interface)
-  ☐ Auth @low
-  ☐ Stream for open router @low
-  ☐ Knowledge base (we need a models to embed the data) @low
-    ☐ https://docs.trychroma.com/docs/overview/getting-started?lang=typescript
-    ☐ https://ollama.com/library/nomic-embed-text
-
-Possible:
-  ☐ Have a history btn on the interfaces to get some/all history with that agent
-
-
-https://github.com/cheahjs/free-llm-api-resources/tree/main
