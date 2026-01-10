@@ -1,14 +1,8 @@
 import { type Request, type Response } from 'express'
-import { getSettings } from '../utils/getSettings'
+import { settings } from '../utils/getSettings'
 import { processAgentRequest } from '../services/agent'
 import { streamIt } from '../utils/streamIt'
 import { processAgentStreamRequest } from '../services/agentStream'
-
-// Load settings at module level to avoid reloading on each request
-const settings = await getSettings()
-if (!settings) {
-  throw new Error('Failed to load settings')
-}
 
 export const ask = async (req: Request, res: Response) => {
   try {
