@@ -1,7 +1,8 @@
 import express from 'express'
-import { askRouter, askStreamRouter } from './routes'
+import { askRouter, askStreamRouter, healthzRouter } from './routes'
 import { loadModels } from './controllers/askController'
 import { loadModels as loadStreamModels } from './controllers/askStreamController'
+import { authMiddleware } from '../utils/authMiddleware'
 
 const app = express()
 
@@ -14,23 +15,10 @@ const port = process.env.PORT || 8000
 loadModels()
 loadStreamModels()
 
-// General MiddleWare
-// We can also use the middleware only for specific routes if needed like the stream route below
-app.use((req, res, next) => {
-  const { authorization } = req.headers
-  const secret = process.env.SECRET
-
-  if (!secret) return next()
-
-  if (!authorization || authorization !== `Bearer ${secret}`)
-    return res.status(401).json({ message: 'Unauthorized' })
-
-  next()
-})
-
 // Routes
-app.use('/ask', askRouter)
-app.use('/ask-stream', askStreamRouter)
+app.use('/healthz', healthzRouter)
+app.use('/ask', authMiddleware, askRouter)
+app.use('/ask-stream', authMiddleware, askStreamRouter)
 
 // Default route
 app.get('/', (req, res) => {
