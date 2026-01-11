@@ -1,6 +1,7 @@
 import express from 'express'
 import { healthzRouter } from './routes/healthzRoute'
 import { agentRouter } from './routes/agentRoute'
+import { headersMiddleware } from './utils/headersMiddleware'
 
 const app = express()
 
@@ -10,8 +11,8 @@ app.use(express.urlencoded({ extended: true }))
 const port = process.env.PORT || 3000
 
 // Routes
-app.use('/healthz', healthzRouter)
-app.use('/agent', agentRouter)
+app.use('/healthz', headersMiddleware, healthzRouter)
+app.use('/agent', headersMiddleware, agentRouter)
 
 // Default route
 app.get('/', (req, res) => {
