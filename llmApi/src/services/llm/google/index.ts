@@ -79,7 +79,7 @@ export const ask = async (llm: LlmType, userMessages: MessagesType) => {
 
 export async function* askStream(
   llm: LlmType,
-  userMessages: MessagesType
+  userMessages: MessagesType,
 ): AsyncGenerator<GeneratorType> {
   const model = llm.model
   try {
@@ -129,7 +129,7 @@ export async function* askStream(
     if (!res.ok || !res.body) {
       console.error(`EG- Google LLM stream error: ${res.statusText}`)
       throw new Error(
-        `Google LLM stream request failed with status ${res.status}`
+        `Google LLM stream request failed with status ${res.status}`,
       )
     }
 
@@ -160,7 +160,7 @@ export async function* askStream(
             const text = data.candidates?.[0]?.content?.parts?.[0]?.text
             const finishReason = data.candidates?.[0]?.finishReason
 
-            if (text)
+            if (text && text !== '\n\n\n\n')
               yield {
                 model,
                 message: text as string,
