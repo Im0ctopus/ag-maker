@@ -20,11 +20,22 @@ todos:
           ✔ Change the messageList back to have multiple agents @done(26-01-12 20:06)
           ✔ Change the message list showing with $derived @done(26-01-12 20:06)
       ✔ Messages on the localStorage @started(26-01-11 18:42) @done(26-01-11 18:50) @lasted(8m10s)
-      ☐ Add a new message system @started(26-01-12 20:08)
-        ☐ Add the new prop to agent list @started(26-01-12 20:08)
-        ☐ When the app receives a message and that message is from !== selected change new to true
-        ☐ When the user changes to that agent, change it to false
-      ☐ Message list
+      ✔ Add "new" message system @started(26-01-12 20:08) @done(26-01-17 16:18) @lasted(4d20h10m15s)
+        ✔ Add the new prop to agent list @started(26-01-12 20:08) @done(26-01-17 16:05) @lasted(4d19h57m21s)
+        ✔ When the app receives a message and that message is from !== selected change new to true @done(26-01-17 16:05)
+        ✔ When the user changes to that agent, change it to false @started(26-01-17 16:06) @done(26-01-17 16:13) @lasted(7m22s)
+        ☐ @low Maintain after "refresh"
+      ☐ Message list @started(26-01-17 16:18)
+        ✔ Base @started(26-01-18 16:05) @done(26-01-18 16:08) @lasted(3m14s)
+        ✔ Scroll down btn @done(26-01-18 17:29)
+        ☐ Show "thinking"/calling x llm @started(26-01-18 17:29)
+        ☐ No messages view
+      ☐ @critical IsLoading and isWitting need to be by agent
+        ☐ Add it to the sideBar
+      ☐ Error handling
+      ☐ Settings button needs a background
+        ☐ inside the list
+        ☐ Add clear all agents
       ☐ Clear agent chat (chat history seems too overwhelmed)
       ☐ Show timings and tokens showing IF received
       ☐ @high multiple agent runners
