@@ -26,7 +26,7 @@ type ResType = {
 export const processAgentStreamRequest = async (
   projectSettings: ProjectSettingsType,
   messages: MessagesType,
-  response: Response
+  response: Response,
 ) => {
   const res: ResType = {
     finishReason: 'STOP',
@@ -40,13 +40,13 @@ export const processAgentStreamRequest = async (
     const usage: AgentUsage = {}
 
     const entryLlmKey = Object.keys(projectSettings.llms).find(
-      (key) => projectSettings.llms[key]?.entry
+      (key) => projectSettings.llms[key]?.entry,
     )
     const entryLlm = projectSettings.llms[entryLlmKey || '']
     if (!entryLlm || !entryLlmKey)
       throw new Error('No entry LLM configured for this project')
 
-    response.write(streamIt({ action: `Calling entry ${entryLlmKey}...` }))
+    // response.write(streamIt({ action: `Calling entry ${entryLlmKey}...` }))
     const stream = callLlmStream(entryLlm, messages)
     const llmRes = await processStreamLlmResponse(
       stream,
@@ -58,7 +58,7 @@ export const processAgentStreamRequest = async (
       },
       durations,
       usage,
-      response
+      response,
     )
 
     res.detailedDurations = durations
@@ -78,7 +78,7 @@ const processStreamLlmResponse = async (
   caller: { id: string; llm: LlmType },
   durations: DurationsType,
   usage: AgentUsage,
-  response: Response
+  response: Response,
 ): Promise<{ finishReason: 'ERROR' | 'STOP' }> => {
   try {
     let value: string | undefined | null = undefined
@@ -118,7 +118,7 @@ const processStreamLlmResponse = async (
         { id: llmId, llm },
         durations,
         usage,
-        response
+        response,
       )
     }
 
@@ -139,7 +139,7 @@ const processStreamLlmResponse = async (
         caller,
         durations,
         usage,
-        response
+        response,
       )
     }
 
