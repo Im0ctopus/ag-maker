@@ -1,0 +1,14 @@
+# Made using https://docs.docker.com/compose/intro/compose-application-model/
+
+services:
+  runner:
+    build: ./agentRunner
+    env_file:
+      - ./agentRunner/.env.production
+    ports:
+      - '3000:3000'
+
+  llm-api:
+    build: ./llmApi
+    env_file:
+      - ./llmApi/.env

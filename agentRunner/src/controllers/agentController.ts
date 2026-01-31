@@ -8,9 +8,8 @@ export const ask = async (req: Request, res: Response) => {
   try {
     const startDate = Date.now()
 
-    const { projectId, messages: messagesString } = req.body
+    const { projectId, messages } = req.body
 
-    const messages = JSON.parse(messagesString)
     const projectSettings = settings[projectId]
     if (!projectSettings)
       throw new Error(`No settings found for project ID ${projectId}`)
@@ -46,7 +45,7 @@ export const askStream = async (req: Request, res: Response) => {
     const agentRes = await processAgentStreamRequest(
       projectSettings,
       messages,
-      res
+      res,
     )
 
     agentRes.totalDuration = Date.now() - startDate

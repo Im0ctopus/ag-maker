@@ -1,94 +1,50 @@
 # Projects TODO list HeHe
 
-
+bugs:
+  [ ] @high After some context the entry bot answers the questions as if he was the specialized llm 
+  [ ] Normal ask is deprecated (does not work)
 
 
 
 todos:
-  ☐ Frontend to talk with the agent - https://t3.chat/ @started(25-12-31 16:58)
-    ✔ Preferences menu/button @started(26-01-01 16:52) @done(26-01-04 19:38) @lasted(3d2h46m26s)
-      ✔ Theming @done(26-01-04 19:38)
-    ✔ Sidebar - Instead of a "chat" you have multiple agents on the sidebar @started(26-01-04 19:38) @done(26-01-04 20:03) @lasted(25m3s)
-      ✔ All the agents on that the user "asked" for will be there @done(26-01-04 20:02)
-        ☐ With this the chat app, and others, will be on a "page" for interfaces, where you can have multiple and deploy them as you want
-      ✔ If there is only one agent don't show sidebar/options to change @done(26-01-04 19:38)
-      ✔ Text area input w/inset shadow @started(26-01-10 17:57) @done(26-01-11 17:50) @lasted(23h53m31s)
-      ✔ Message the agent @started(26-01-11 17:50) @done(26-01-12 20:08) @lasted(1d2h18m19s)
-        ✔ split buffer into lines by \n\n @done(26-01-12 19:50)
-        ✔ Multi messages @done(26-01-12 20:08)
-          ✔ "Store" the agentId inside the sendMessage func @done(26-01-12 20:06)
-          ✔ Change the messageList back to have multiple agents @done(26-01-12 20:06)
-          ✔ Change the message list showing with $derived @done(26-01-12 20:06)
-      ✔ Messages on the localStorage @started(26-01-11 18:42) @done(26-01-11 18:50) @lasted(8m10s)
-      ✔ Add "new" message system @started(26-01-12 20:08) @done(26-01-17 16:18) @lasted(4d20h10m15s)
-        ✔ Add the new prop to agent list @started(26-01-12 20:08) @done(26-01-17 16:05) @lasted(4d19h57m21s)
-        ✔ When the app receives a message and that message is from !== selected change new to true @done(26-01-17 16:05)
-        ✔ When the user changes to that agent, change it to false @started(26-01-17 16:06) @done(26-01-17 16:13) @lasted(7m22s)
-        ☐ @low Maintain after "refresh"
-      ☐ Message list @started(26-01-17 16:18)
-        ✔ Base @started(26-01-18 16:05) @done(26-01-18 16:08) @lasted(3m14s)
-        ✔ Scroll down btn @done(26-01-18 17:29)
-        ☐ Show "thinking"/calling x llm @started(26-01-18 17:29)
-        ☐ No messages view
-      ☐ @critical IsLoading and isWitting need to be by agent
-        ☐ Add it to the sideBar
-      ☐ Error handling
-      ☐ Settings button needs a background
-        ☐ inside the list
-        ☐ Add clear all agents
-      ☐ Clear agent chat (chat history seems too overwhelmed)
-      ☐ Show timings and tokens showing IF received
-      ☐ @high multiple agent runners
-      ☐ Add notifications
-      ☐ Add tooltips
-      ☐ @low fix the sidebar localstorage "wait"
-  ✔ Agent(global and per project) and llmApi healthz @done(26-01-10 21:56)
-  ☐ Better error handling when the llmApi is not available
-  ☐ Start backOffice/main app project
-  ☐ Endpoint to store data from the usage - make a call to the main app with the project token(uuid)
-    ☐ Chats - agentApi
-    ☐ Timings - agentApi
-    ☐ Used tokens - llmApi
-  ☐ BackOffice (so much work holy)
-    ☐ Interfaces page(you can manually redeploy an interface)
-  ☐ Conversation summary only when the user asks for it (it can be expensive)
-  ☐ Intentions need to be checked every 10/15 minutes on conversations with more than X messages and 10m+ old
-  ☐ Agent auth @high 
-  ☐ Stream for open router @low
-  ☐ Knowledge base (we need a models to embed the data) @low
-    ☐ https://docs.trychroma.com/docs/overview/getting-started?lang=typescript
-    ☐ https://ollama.com/library/nomic-embed-text
+  [ ] Frontend to talk with the agent - https://t3.chat/ @started(25-12-31 16:58)
+    [X] Add "new" message system @started(26-01-12 20:08) @done(26-01-17 16:18) @lasted(4d20h10m15s)
+      [ ] @low Maintain after "refresh"
+    [ ] Message list @started(26-01-17 16:18)
+      [X] Add loading and show "thinking"/calling x llm @started(26-01-18 17:29) @done(26-01-31 15:41) @lasted(1w5d22h12m10s)
+        [ ] @low Add it to the sideBar @started(26-01-31 22:12)
+        [ ] @low max messages to the agent (save resources)
+      [ ] No messages view
+    [ ] Error handling
+    [ ] Settings button needs a background
+      [ ] inside the list
+      [ ] Clear agent chat (chat history seems too overwhelmed)
+      [ ] Add clear all agents
+    [ ] @critical Show timings and tokens showing IF received
+    [ ] @high multiple agent runners
+    [ ] Add notifications
+    [ ] Add tooltips
+    [ ] @low fix the sidebar localstorage "wait"
+  [ ] Add max messages sent from the llmApi
+  [ ] Better error handling when the llmApi is not available
+  [ ] Start backOffice/main app project
+  [ ] Endpoint to store data from the usage - make a call to the main app with the project token(uuid)
+    [ ] Chats - agentApi
+    [ ] Timings - agentApi
+    [ ] Used tokens - llmApi
+  [ ] BackOffice (so much work holy)
+    [ ] Interfaces page(you can manually redeploy an interface)
+      [ ] With this the chat app, and others, will be on a "page" for interfaces, where you can have multiple and deploy them as you want
+  [ ] Conversation summary only when the user asks for it (it can be expensive)
+  [ ] Intentions need to be checked every 10/15 minutes on conversations with more than X messages and 10m+ old
+  [ ] Agent auth @high
+  [ ] Stream for open router @low
+  [ ] Knowledge base (we need a models to embed the data) @low
+    [ ] https://docs.trychroma.com/docs/overview/getting-started?lang=typescript
+    [ ] https://ollama.com/library/nomic-embed-text
 
 Possible:
-  ☐ Have a history btn on the interfaces to get some/all history with that agent
+  [ ] Have a history btn on the interfaces to get some/all history with that agent
 
 
 https://github.com/cheahjs/free-llm-api-resources/tree/main
-
-done done:
-  ✔ Basic express app @done(25-12-08 15:49)
-  ✔ Design the agent settings (how and where are we gonna store the settings) @done(25-12-13 14:41)
-    ✔ in a json @done(25-12-13 14:41)
-      ✔ Have a json with all the agents(with the prompt and the model) and tools with its own settings @done(25-12-13 14:41)
-  ✔ Open router models @started(25-12-13 14:48) @done(25-12-14 16:53) @lasted(1d2h5m24s)
-  ✔ Ask agents endpoint (POST) @done(25-12-14 16:53)
-   ✔ Get project settings @done(25-12-14 16:53)
-   ✔ Speak with the llm provider @done(25-12-14 16:53)
-  ✔ Multi llm node @done(25-12-14 17:39)
-  ✔ Add google ai studio provider @done(25-12-15 16:41)
-  ✔ Make good prompts and test the current multi node implementation @done(25-12-15 16:43)
-  ✔ Basic api tool @started(25-12-17 16:27) @done(25-12-17 17:07) @lasted(40m48s)
-  ✔ Make a good return on the timings @started(25-12-17 21:04) @done(25-12-17 21:34) @lasted(30m10s)
-  ✔ Better error handling @done(25-12-21 15:20)
-  ✔ Learn AsyncGenerator and stream stuff @started(25-12-24 15:54) @done(25-12-26 20:15) @lasted(2d4h21m50s)
-  ✔ Streaming response @done(25-12-26 19:52)
-    ✔ https://gist.github.com/montanaflynn/6a438f0be606daede899 @done(25-12-21 22:10)
-    ✔ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncGenerator#async_generator_iteration @done(25-12-26 19:52)
-  ✔ Stream actions (so it says "looking" when asking the api) @done(25-12-26 20:15)
-  ✔ Create a new api for the llmCalls @started(25-12-27 17:41) @done(25-12-28 00:00) @lasted(6h19m9s)
-    ✔ The llm service will only call the llmApi and process the answer with a generator @done(25-12-28 00:00)
-    ✔ The current service implementation will be moved to llmApi @done(25-12-28 00:00)
-    ✔ Add a token auth to this, this token should be "per project/user" @done(25-12-28 00:00)
-  ✔ Used tokens @done(25-12-28 16:34)
-  ✔ Agent return used tokens @done(25-12-28 16:48)
-  ✔ Add env option to send the timing and tokens information (something with dev) @started(25-12-28 16:48) @done(25-12-31 16:56) @lasted(3d8m50s)

@@ -22,7 +22,7 @@ app.use('/ask-stream', authMiddleware, askStreamRouter)
 
 // Default route
 app.get('/', (req, res) => {
-  res.send('Hello!')
+  res.send('Hello! (from llmApi)')
 })
 
 // Start server
