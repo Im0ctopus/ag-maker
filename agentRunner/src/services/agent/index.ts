@@ -22,7 +22,7 @@ type ResType = {
 
 export const processAgentRequest = async (
   projectSettings: ProjectSettingsType,
-  messages: MessagesType
+  messages: MessagesType,
 ) => {
   const res: ResType = {
     success: true,
@@ -37,7 +37,7 @@ export const processAgentRequest = async (
     const usage: AgentUsage = {}
 
     const entryLlmKey = Object.keys(projectSettings.llms).find(
-      (key) => projectSettings.llms[key]?.entry
+      (key) => projectSettings.llms[key]?.entry,
     )
     const entryLlm = projectSettings.llms[entryLlmKey || '']
     if (!entryLlm || !entryLlmKey)
@@ -53,7 +53,7 @@ export const processAgentRequest = async (
       messages,
       { id: entryLlmKey, llm: entryLlm },
       durations,
-      usage
+      usage,
     )
     res.detailedDurations = durations
     res.usage = usage
@@ -71,7 +71,7 @@ const processLlmResponse = async (
   messages: MessagesType,
   caller: { id: string; llm: LlmType },
   durations: DurationsType,
-  usage: AgentUsage
+  usage: AgentUsage,
 ): Promise<string> => {
   if (res.includes('$$llm-')) {
     const llmId = res.match(/\$\$(.*?)\$\$/)?.[1]?.trim() || ''
@@ -89,7 +89,7 @@ const processLlmResponse = async (
       messages,
       { id: llmId, llm },
       durations,
-      usage
+      usage,
     )
   }
   if (res.includes('$$api-')) {
